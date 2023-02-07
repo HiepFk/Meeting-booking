@@ -1,5 +1,6 @@
 import React from "react";
-
+import Date from "./Date";
+import styled from "styled-components";
 function Canlendar() {
   const nameDay = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
   return (
@@ -54,8 +55,5 @@ const Wrapper = styled.div`
     justify-content: center;
     font-weight: 600;
   }
-  /* .display{
-      dis
-    } */
 `;
 export default Canlendar;
