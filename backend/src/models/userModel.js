@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema(
       lowcase: true,
     },
     number: String,
+    photo: String,
     isAdmin: {
       type: Boolean,
       default: false,

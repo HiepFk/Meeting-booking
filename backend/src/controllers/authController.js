@@ -6,7 +6,6 @@ const {
   createSendToken,
   generateAccessToken,
   generateRefreshToken,
-  generateActivationToken,
 } = require("../utils/jwtToken");
 
 const sendMail = require("../utils/sendEmail");
@@ -15,45 +14,7 @@ const jwt = require("jsonwebtoken");
 
 let refreshTokens = [];
 
-const CLIENT_URL = process.env.CLIENT_URL;
-
 const authController = {
-  login: catchAsync(async (req, res, next) => {
-    const { email, password } = req.body;
-    if (!email || !password) {
-      return next(new AppError("Please provide email and password!", 400));
-    }
-
-    const user = await User.findOne({ email }).select("+password");
-    if (!user) {
-      return next(new AppError("Incorrect email ", 401));
-    }
-
-    if (!(await user.correctPassword(password, user.password))) {
-      return next(new AppError("Incorrect password", 401));
-    }
-    createSendToken(
-      user,
-      200,
-      req,
-      res,
-      (message = "Login success"),
-      refreshTokens
-    );
-  }),
-  signup: catchAsync(async (req, res, next) => {
-    const { email } = req.body;
-    const newUser = {
-      email: req.body.email,
-      name: req.body.name,
-      password: req.body.password,
-      passwordConfirm: req.body.passwordConfirm,
-    };
-    const activation_token = generateActivationToken(newUser);
-    const url = `${CLIENT_URL}/user/activate/${activation_token}`;
-    sendMail(res, email, url, "Verify your email address");
-  }),
-
   activateEmail: catchAsync(async (req, res, next) => {
     const { activation_token } = req.body;
     const user = jwt.verify(activation_token, process.env.JWT_ACTIVATION_KEY);
@@ -145,74 +106,6 @@ const authController = {
 
     res.status(200).json({ status: "success", message: "You are loggedout" });
   },
-  updatePassword: catchAsync(async (req, res, next) => {
-    const user = await User.findById(req.user.id).select("+password");
-
-    if (
-      !(await user.correctPassword(req.body.passwordCurrent, user.password))
-    ) {
-      return next(new AppError("Your current password is wrong.", 401));
-    }
-
-    user.password = req.body.password;
-    user.passwordConfirm = req.body.passwordConfirm;
-    await user.save();
-
-    createSendToken(
-      user,
-      200,
-      req,
-      res,
-      (message = "Update password success"),
-      refreshTokens
-    );
-  }),
-
-  forgotPassword: catchAsync(async (req, res, next) => {
-    const user = await User.findOne({ email: req.body.email }).select(
-      "+password"
-    );
-    if (!user) {
-      return next(new AppError("No user found with that ID", 404));
-    }
-    if (!user.password) {
-      return next(
-        new AppError("Just login by button google login in login page ", 404)
-      );
-    }
-    await user.save({ validateBeforeSave: false });
-
-    const activation_token = generateActivationToken({ id: user._id });
-    const url = `${CLIENT_URL}/user/reset/${activation_token}`;
-
-    sendMail(res, req.body.email, url, "Check your email to reset");
-  }),
-
-  resetPassword: catchAsync(async (req, res, next) => {
-    const { activation_token } = req.body;
-    const decoded = jwt.verify(
-      activation_token,
-      process.env.JWT_ACTIVATION_KEY
-    );
-
-    const user = await User.findById(decoded.id);
-
-    if (!user) {
-      return next(new AppError("Token is invaild or has expired", 400));
-    }
-    user.password = req.body.password;
-    user.passwordConfirm = req.body.passwordConfirm;
-
-    await user.save();
-    createSendToken(
-      user,
-      200,
-      req,
-      res,
-      (message = "Password successfully changed!"),
-      refreshTokens
-    );
-  }),
 };
 
 module.exports = authController;

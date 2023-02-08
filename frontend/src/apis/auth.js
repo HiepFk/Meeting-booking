@@ -20,15 +20,17 @@ export const signInWithGoogle = async (dispatch, navigate) => {
   dispatch(LoginStart());
   signInWithPopup(auth, provider)
     .then((result) => {
+      console.log(result.user);
       axios
         .post(`${link}/v1/user/sign-google`, {
           name: result.user.displayName,
           email: result.user.email,
+          photo: result.user.photoURL,
         })
         .then((res) => {
           dispatch(LoginSuccess(res.data));
           console.log(res.data);
-          //   navigate("/");
+          navigate("/");
         });
     })
     .catch((error) => {

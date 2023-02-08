@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { signInWithGoogle } from "../apis/auth";
 import { useDispatch } from "react-redux";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FaGooglePlusG } from "react-icons/fa";
 import logo from "../assets/image/logo_red.jpg";
 import wrapper from "../assets/image/login.jpg";
@@ -9,7 +9,7 @@ import styled from "styled-components";
 
 function Login() {
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   // const user = useSelector((state) => state.auth.user);
   // useEffect(() => {
   //   if (user && user?.isAdmin) {
@@ -32,7 +32,7 @@ function Login() {
         <button
           className="login_btn"
           type="button"
-          onClick={() => signInWithGoogle(dispatch)}
+          onClick={() => signInWithGoogle(dispatch, navigate)}
         >
           <FaGooglePlusG />
         </button>
