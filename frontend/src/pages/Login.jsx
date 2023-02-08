@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { signInWithGoogle } from "../apis/auth";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FaGooglePlusG } from "react-icons/fa";
 import logo from "../assets/image/logo_red.jpg";
@@ -10,12 +10,12 @@ import styled from "styled-components";
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const user = useSelector((state) => state.auth.user);
-  // useEffect(() => {
-  //   if (user && user?.isAdmin) {
-  //     navigate("/");
-  //   }
-  // }, [user, navigate]);
+  const user = useSelector((state) => state.auth.user);
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   return (
     <Wrapper

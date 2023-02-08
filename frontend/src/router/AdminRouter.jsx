@@ -11,7 +11,7 @@ function AdminRouter() {
       <Route exact path="/" element={<Home />} />
       <Route exact path="/user/*" element={<User />} />
       <Route exact path="/room/*" element={<Room />} />
-      <Route exact path="/deparment/*" element={<Department />} />
+      <Route exact path="/department/*" element={<Department />} />
     </Routes>
   );
 }
