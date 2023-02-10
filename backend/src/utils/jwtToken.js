@@ -36,6 +36,7 @@ const createSendToken = (
     // secure: req.secure || req.headers["x-forwarded-proto"] == "https",
     // sameSite: "none",
   });
+
   user.password = undefined;
   const { password, ...others } = user._doc;
   res

@@ -100,6 +100,7 @@ const authController = {
   }),
   logout: (req, res, next) => {
     res.clearCookie("refreshToken");
+    console.log("Clear");
     refreshTokens = refreshTokens.filter(
       (token) => token !== req.cookies.refreshToken
     );

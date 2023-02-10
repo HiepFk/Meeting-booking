@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { useContext, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import Header from "../components/Header";
+import { AuthContext } from "../context/authContext";
 
 const UserAuth = () => {
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
-  const user = useSelector((state) => state.auth?.user);
 
   useEffect(() => {
     if (!user) {
@@ -14,7 +13,6 @@ const UserAuth = () => {
   }, [navigate, user]);
   return (
     <>
-      <Header />
       <Outlet />
     </>
   );

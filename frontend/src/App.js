@@ -5,10 +5,10 @@ import UserAuth from "./auth/UserAuth";
 import AdminAuth from "./auth/AdminAuth";
 import UserRouter from "./router/UserRouter";
 import AdminRouter from "./router/AdminRouter";
-import Home from "./pages/Home";
-import User from "./pages/User";
-import Room from "./pages/Room";
-import Department from "./pages/Department";
+
+import "bootstrap/dist/css/bootstrap.min.css";
+import Header from "./components/Header";
+
 function App() {
   return (
     <>
@@ -17,16 +17,17 @@ function App() {
       </Routes>
       <div className="main">
         <Navbar />
-        <Routes>
-          <Route exact path="/" element={<AdminAuth />}>
-            {/* <Navbar /> */}
-            <Route exact path="/" element={<AdminRouter />} />
-          </Route>
-          <Route exact path="/" element={<UserAuth />}>
-            {/* <Navbar /> */}
-            <Route index element={<UserRouter />} />
-          </Route>
-        </Routes>
+        <div className="content">
+          <Header />
+          <Routes>
+            <Route exact path="/" element={<AdminAuth />}>
+              <Route exact path="/" element={<AdminRouter />} />
+            </Route>
+            <Route exact path="/" element={<UserAuth />}>
+              <Route index element={<UserRouter />} />
+            </Route>
+          </Routes>
+        </div>
       </div>
     </>
   );
