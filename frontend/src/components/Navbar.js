@@ -1,13 +1,12 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import ListEvent from "./Navbar/ListEvent";
 import Menu from "./Navbar/Menu";
 import Top from "./Navbar/Top";
+import { AuthContext } from "../context/authContext";
+
 function Navbar() {
-  const navigate = useNavigate();
-  const user = useSelector((state) => state.auth?.user);
+  const { user } = useContext(AuthContext);
   if (!user) {
     return <></>;
   }
@@ -25,5 +24,8 @@ const Wrapper = styled.div`
   border-right: 1px solid #cccc;
   height: 100vh;
   width: 15rem;
+  position: fixed;
+  left: 0;
+  top: 0;
 `;
 export default Navbar;

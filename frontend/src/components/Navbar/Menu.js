@@ -28,7 +28,7 @@ const MenyStyle = styled.div`
   display: flex;
   flex-direction: column;
   padding-left: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   .menu {
     display: flex;
     align-items: center;
@@ -40,15 +40,25 @@ const MenyStyle = styled.div`
     :hover {
       color: #004ffe;
       opacity: 0.8;
+      .menu_text {
+        color: black;
+      }
     }
   }
   .menu_icon {
-    width: 2rem;
+    width: 2.5rem;
     font-size: 1.5rem;
+  }
+  .menu_text {
+    font-weight: 600;
+    transform: translateY(0.25rem);
   }
   .active {
     color: #004ffe;
     opacity: 1;
+    .menu_text {
+      color: black;
+    }
   }
 `;
 export default Menu;

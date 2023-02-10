@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { useContext, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import Header from "../components/Header";
+import { AuthContext } from "../context/authContext";
 
 const AdminAuth = () => {
   const navigate = useNavigate();
-  const user = useSelector((state) => state.auth?.user);
+  const { user } = useContext(AuthContext);
   useEffect(() => {
     if (!user) {
       navigate("/login");
@@ -16,7 +15,6 @@ const AdminAuth = () => {
   }, [navigate, user]);
   return (
     <>
-      <Header />
       <Outlet />
     </>
   );

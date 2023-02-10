@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { signInWithGoogle } from "../apis/auth";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaGooglePlusG } from "react-icons/fa";
 import logo from "../assets/image/logo_red.jpg";
 import wrapper from "../assets/image/login.jpg";
 import styled from "styled-components";
+import { AuthContext } from "../context/authContext";
+import Button from "react-bootstrap/Button";
 
 function Login() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state) => state.auth.user);
+  const { user, login } = useContext(AuthContext);
   useEffect(() => {
     if (user) {
       navigate("/");
@@ -22,31 +21,27 @@ function Login() {
       style={{
         background: `url(${wrapper}) no-repeat center/cover`,
       }}
+      className="vh-100 vw-100 d-flex align-items-center justify-content-center"
     >
-      <div className="login_wrapper">
+      <div className="login_wrapper ">
         <div className="login_content">
           <img className="logo_img" src={logo} alt="" />
-          <h1 className="login_title">Welcome</h1>
+          <h1 className="text-opacity-80 text-danger">Welcome</h1>
         </div>
 
-        <button
+        <Button
+          variant="danger"
           className="login_btn"
-          type="button"
-          onClick={() => signInWithGoogle(dispatch, navigate)}
+          onClick={() => login(navigate)}
         >
           <FaGooglePlusG />
-        </button>
+        </Button>
       </div>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   .login_wrapper {
     padding: 4rem 5rem;
     background-color: rgba(255, 255, 255, 0.5);
@@ -63,10 +58,6 @@ const Wrapper = styled.div`
     align-items: center;
     flex-direction: column;
   }
-  .login_title {
-    /* color: rgba(0, 0, 0, 0.9); */
-    color: rgba(255, 0, 0, 0.8);
-  }
   .logo_img {
     width: 10rem;
     height: 10rem;
@@ -74,13 +65,8 @@ const Wrapper = styled.div`
   }
   .login_btn {
     margin-top: 1rem;
-    padding: 0.75rem 1.25rem;
-    border: none;
-    border-radius: 1rem;
-    background-color: rgba(255, 0, 0, 0.7);
-    color: white;
+    padding: 0rem 1.25rem 0.5rem;
     font-size: 2.5rem;
-    cursor: pointer;
     box-shadow: 0 10px 10px 0px rgba(255, 0, 0, 0.5);
     transition: all 0.5s linear;
     :hover {
