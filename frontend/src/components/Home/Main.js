@@ -3,7 +3,6 @@ import Top from "./Top";
 import ListRoom from "./ListRoom";
 import Canlendar from "./Canlendar";
 import styled from "styled-components";
-
 function Main() {
   return (
     <Wrapper>

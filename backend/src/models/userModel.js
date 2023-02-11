@@ -1,18 +1,19 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema(
   {
-    name: {
-      type: String,
-    },
+    name: String,
+    userName: String,
     email: {
       type: String,
       unique: true,
       lowcase: true,
     },
-    number: String,
     photo: String,
+    group: {
+      type: mongoose.Schema.ObjectId,
+      ref: "Department",
+    },
     isAdmin: {
       type: Boolean,
       default: false,
@@ -20,11 +21,6 @@ const userSchema = new mongoose.Schema(
     isActive: {
       type: Boolean,
       default: false,
-    },
-    group: {
-      type: mongoose.Schema.ObjectId,
-      ref: "Department",
-      // required: true,
     },
   },
   {

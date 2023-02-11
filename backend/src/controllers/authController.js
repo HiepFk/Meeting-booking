@@ -15,33 +15,6 @@ const jwt = require("jsonwebtoken");
 let refreshTokens = [];
 
 const authController = {
-  activateEmail: catchAsync(async (req, res, next) => {
-    const { activation_token } = req.body;
-    const user = jwt.verify(activation_token, process.env.JWT_ACTIVATION_KEY);
-    const { name, email, password, passwordConfirm } = user;
-
-    const check = await User.findOne({ email });
-    if (check) {
-      return next(new AppError("This email already exists", 400));
-    }
-
-    const newUser = new User({
-      name,
-      email,
-      password,
-      passwordConfirm,
-    });
-    await newUser.save();
-    createSendToken(
-      newUser,
-      201,
-      req,
-      res,
-      (message = "Account has been activated!. Enjoy ❤️."),
-      refreshTokens
-    );
-  }),
-
   googleAuth: catchAsync(async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email });
     if (user) {

@@ -2,15 +2,12 @@ import Button from "react-bootstrap/Button";
 import React from "react";
 import { MdRefresh } from "react-icons/md";
 import styled from "styled-components";
-import ModalEvent from "../ModalEvent";
+import ModalUser from "./ModalUser";
 function Top() {
   return (
     <Wrapper>
-      {/* <Button variant="success" type="submit">
-        Add new event
-      </Button> */}
-      <ModalEvent />
-      <div className="top_title">Events Manager</div>
+      <ModalUser />
+      <div className="top_title">Users Manager</div>
       <div className="top_icon">
         <MdRefresh />
       </div>

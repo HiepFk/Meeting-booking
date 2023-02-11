@@ -18,8 +18,8 @@ export const EventProvider = ({ children }) => {
   const getEvent = async (id) => {
     dispatch({ type: eventAction.GET_EVENT_BEGIN });
     try {
-      await axiosToken.get(`event/${id}`);
-      dispatch({ type: eventAction.GET_EVENT_SUCCESS });
+      const res = await axiosToken.get(`event/${id}`);
+      dispatch({ type: eventAction.GET_EVENT_SUCCESS, payload: res.data });
     } catch (error) {
       dispatch({ type: eventAction.GET_EVENT_ERROR });
     }
@@ -27,8 +27,8 @@ export const EventProvider = ({ children }) => {
   const getListEvent = async () => {
     dispatch({ type: eventAction.GET_LISTEVENT_BEGIN });
     try {
-      await axiosToken.get(`event`);
-      dispatch({ type: eventAction.GET_LISTEVENT_SUCCESS });
+      const res = await axiosToken.get(`event`);
+      dispatch({ type: eventAction.GET_LISTEVENT_SUCCESS, payload: res.data });
     } catch (error) {
       dispatch({ type: eventAction.GET_LISTEVENT_ERROR });
     }
@@ -36,8 +36,8 @@ export const EventProvider = ({ children }) => {
   const updateEvent = async (id, data) => {
     dispatch({ type: eventAction.GET_EVENT_BEGIN });
     try {
-      await axiosToken.patch(`event/${id}`, data);
-      dispatch({ type: eventAction.GET_EVENT_SUCCESS });
+      const res = await axiosToken.patch(`event/${id}`, data);
+      dispatch({ type: eventAction.GET_EVENT_SUCCESS, payload: res.data });
     } catch (error) {
       dispatch({ type: eventAction.GET_EVENT_ERROR });
     }
@@ -45,8 +45,8 @@ export const EventProvider = ({ children }) => {
   const deleteEvent = async (id) => {
     dispatch({ type: eventAction.GET_LISTEVENT_BEGIN });
     try {
-      await axiosToken.delete(`event/${id}`);
-      dispatch({ type: eventAction.GET_LISTEVENT_SUCCESS });
+      const res = await axiosToken.delete(`event/${id}`);
+      dispatch({ type: eventAction.GET_LISTEVENT_SUCCESS, payload: res.data });
     } catch (error) {
       dispatch({ type: eventAction.GET_LISTEVENT_ERROR });
     }
@@ -54,8 +54,8 @@ export const EventProvider = ({ children }) => {
   const addEvent = async (data) => {
     dispatch({ type: eventAction.GET_LISTEVENT_BEGIN });
     try {
-      await axiosToken.post(`event`, data);
-      dispatch({ type: eventAction.GET_LISTEVENT_SUCCESS });
+      const res = await axiosToken.post(`event`, data);
+      dispatch({ type: eventAction.GET_LISTEVENT_SUCCESS, payload: res.data });
     } catch (error) {
       dispatch({ type: eventAction.GET_LISTEVENT_ERROR });
     }

@@ -33,7 +33,7 @@ const eventReducer = (state, action) => {
         listEvent: [],
       };
     }
-    case eventAction.GET_EVENT_SUCCESS: {
+    case eventAction.GET_LISTEVENT_SUCCESS: {
       return {
         ...state,
         loading: false,

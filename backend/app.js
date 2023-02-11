@@ -17,7 +17,7 @@ const AppError = require("./src/utils/appError");
 const userRoute = require("./src/routes/userRoute");
 const roomRoute = require("./src/routes/roomRoute");
 const departmentRoute = require("./src/routes/departmentRoute");
-const bookingRoute = require("./src/routes/bookingRoute");
+const eventRoute = require("./src/routes/eventRoute");
 
 const app = express();
 
@@ -51,7 +51,7 @@ app.use(xss());
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/room", roomRoute);
 app.use("/api/v1/department", departmentRoute);
-app.use("/api/v1/booking", bookingRoute);
+app.use("/api/v1/event", eventRoute);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

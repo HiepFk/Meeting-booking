@@ -4,7 +4,6 @@ const { isAuthenticatedUser, isAdmin } = require("../middleware/auth");
 const router = require("express").Router();
 
 router.post("/sign-google", authController.googleAuth);
-router.post("/activation", authController.activateEmail);
 router.get("/logout", authController.logout);
 
 router.post("/refresh", authController.requestRefreshToken);

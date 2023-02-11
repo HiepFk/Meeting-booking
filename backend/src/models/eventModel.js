@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
-const bookingSchema = new mongoose.Schema(
+const eventSchema = new mongoose.Schema(
   {
-    title: String,
+    summary: String,
     email: {
       type: String,
       unique: true,
@@ -35,7 +35,7 @@ const bookingSchema = new mongoose.Schema(
   }
 );
 
-bookingSchema.pre(/^find/, function (next) {
+eventSchema.pre(/^find/, function (next) {
   this.populate({
     path: "group",
     select: "name",
@@ -46,6 +46,6 @@ bookingSchema.pre(/^find/, function (next) {
   next();
 });
 
-const Booking = mongoose.model("Booking", bookingSchema);
+const Event = mongoose.model("Event", eventSchema);
 
-module.exports = Booking;
+module.exports = Event;

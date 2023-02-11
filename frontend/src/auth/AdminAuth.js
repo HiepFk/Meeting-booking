@@ -9,9 +9,9 @@ const AdminAuth = () => {
     if (!user) {
       navigate("/login");
     }
-    if (!user?.isAdmin) {
-      navigate("/");
-    }
+    // if (!user?.isAdmin) {
+    //   navigate("/");
+    // }
   }, [navigate, user]);
   return (
     <>
