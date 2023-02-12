@@ -1,102 +1,65 @@
-import React from "react";
-import { Calendar, dateFnsLocalizer, onNavigate } from "react-big-calendar";
-// import BigCalendar from 'react-big-calendar';
-import format from "date-fns/format";
-import parse from "date-fns/parse";
-import startOfWeek from "date-fns/startOfWeek";
-import getDay from "date-fns/getDay";
-import enUS from "date-fns/locale/en-US";
+import React, { useContext, useEffect, useState } from "react";
+import { Calendar, momentLocalizer, Views } from "react-big-calendar";
+
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { ButtonGroup, Button } from "react-bootstrap";
+import moment from "moment";
 
-const locales = {
-  "en-US": enUS,
-};
+import ModalEvent from "./ModalEvent";
+import { EventContext } from "../../context/eventContext";
 
-const events = [
-  {
-    title: "Big Meeting",
-    allDay: true,
-    start: new Date(2023, 2, 0),
-    end: new Date(2023, 2, 0),
-  },
-  {
-    title: "Vacation",
-    start: new Date(2023, 2, 7),
-    end: new Date(2023, 2, 10),
-  },
-  {
-    title: "Conference",
-    start: new Date(2023, 2, 20),
-    end: new Date(2023, 2, 23),
-  },
-];
-
-const localizer = dateFnsLocalizer({
-  format,
-  parse,
-  startOfWeek,
-  getDay,
-  locales,
-});
-// export let navigate = {
-//   PREVIOUS: "PREV",
-//   NEXT: "NEXT",
-//   TODAY: "TODAY",
-//   DATE: "DATE",
-// };
-// function CustomToolbar() {
-//   return (
-//     <div className="toolbar-container">
-//       <div className="back-next-buttons">
-//         <button
-//           className="btn btn-back"
-//           // onClick={navigate.bind(null, navigate.TODAY)}
-//           onClick={(e) => e.onNavigate("PREV")}
-//         >
-//           {/* <BackIcon /> */}
-//           👈
-//         </button>
-//         <label className="label-date">Aug-Sept 2016</label>
-//       </div>
-
-//       <div className="filter-container">
-//         <ButtonGroup>
-//           <Button className="bg-filter-off">
-//             <span className="label-filter-off">Day</span>
-//           </Button>
-//           <Button className="bg-filter-off">
-//             <span className="label-filter-off">Week</span>
-//           </Button>
-//           <Button className="bg-filter-off">
-//             <span className="label-filter-off">Month</span>
-//           </Button>
-//           <Button className="bg-filter-off">
-//             <span className="label-filter-off">Year</span>
-//           </Button>
-//         </ButtonGroup>
-//       </div>
-//     </div>
-//   );
-// }
-
+const localizer = momentLocalizer(moment);
 function Canlendar() {
+  const { listEvent, getListEvent, reFresh } = useContext(EventContext);
+
+  const [show, setShow] = useState(false);
+  const [item, setItem] = useState(null);
+
+  const handeEdit = (item) => {
+    setItem(item);
+    setShow(true);
+  };
+
+  useEffect(() => {
+    getListEvent();
+  }, [reFresh]);
+
+  const events = [
+    {
+      title: "My Event",
+      start: "2023-02-21T13:45:00-05:00",
+      end: "2023-02-25T14:00:00-05:00",
+      // elcolor:'red'
+      colorEvento: "red",
+    },
+    {
+      title: "Otro",
+      start: "2023-02-15T13:45:00-05:00",
+      end: "2023-02-23T14:00:00-05:00",
+      colorEvento: "green",
+      color: "white",
+    },
+  ];
+
   return (
-    <Calendar
-      localizer={localizer}
-      events={events}
-      startAccessor="start"
-      endAccessor="end"
-      style={{ height: 500 }}
-      // onSelectEvent={openEventClick}
-      components={
-        {
-          // event: Event,
-          // toolbar: CustomToolbar,
-        }
-      }
-      views={["week", "day", "month"]}
-    />
+    <>
+      <ModalEvent show={show} setShow={setShow} event={item} />
+      <Calendar
+        localizer={localizer}
+        events={listEvent || []}
+        startAccessor="start"
+        endAccessor="end"
+        style={{ height: 500 }}
+        views={["week", "day", "month"]}
+        eventPropGetter={(event) => {
+          const backgroundColor = event.colorEvento
+            ? event.colorEvento
+            : "black";
+          const color = event.color ? event.color : "white";
+          return { style: { backgroundColor, color } };
+        }}
+        onSelectEvent={handeEdit}
+      />
+    </>
   );
 }
 

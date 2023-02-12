@@ -1,17 +1,20 @@
 import Button from "react-bootstrap/Button";
-import React from "react";
+import React, { useContext, useState } from "react";
 import { MdRefresh } from "react-icons/md";
 import styled from "styled-components";
-import ModalEvent from "../ModalEvent";
+import ModalEvent from "./ModalEvent";
+import { EventContext } from "../../context/eventContext";
 function Top() {
+  const [show, setShow] = useState(false);
+  const { handeChangeReFresh } = useContext(EventContext);
   return (
     <Wrapper>
-      {/* <Button variant="success" type="submit">
+      <ModalEvent show={show} setShow={setShow} />
+      <Button variant="primary" onClick={() => setShow(true)}>
         Add new event
-      </Button> */}
-      <ModalEvent />
+      </Button>
       <div className="top_title">Events Manager</div>
-      <div className="top_icon">
+      <div className="top_icon icon" onClick={() => handeChangeReFresh()}>
         <MdRefresh />
       </div>
     </Wrapper>

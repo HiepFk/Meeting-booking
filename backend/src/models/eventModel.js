@@ -2,13 +2,9 @@ const mongoose = require("mongoose");
 
 const eventSchema = new mongoose.Schema(
   {
-    summary: String,
-    email: {
-      type: String,
-      unique: true,
-      lowcase: true,
-    },
-    group: {
+    title: String,
+    email: String,
+    department: {
       type: mongoose.Schema.ObjectId,
       required: true,
       ref: "Department",
@@ -18,9 +14,10 @@ const eventSchema = new mongoose.Schema(
       required: true,
       ref: "Room",
     },
-    date: String,
-    start: Date,
-    end: Date,
+    colorEvento: String,
+    day: String,
+    start: Object,
+    end: Object,
 
     isRepeat: {
       type: Boolean,
@@ -37,11 +34,11 @@ const eventSchema = new mongoose.Schema(
 
 eventSchema.pre(/^find/, function (next) {
   this.populate({
-    path: "group",
+    path: "department",
     select: "name",
   }).populate({
     path: "room",
-    select: "name",
+    select: "name color",
   });
   next();
 });
