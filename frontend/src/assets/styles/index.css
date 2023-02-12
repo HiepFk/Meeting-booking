@@ -33,3 +33,6 @@ a {
   flex-direction: column;
   margin-left: 15rem;
 }
+.icon {
+  cursor: pointer;
+}

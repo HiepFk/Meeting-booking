@@ -1,7 +1,7 @@
 import { createContext, useReducer } from "react";
 import roomReducer from "../reducers/roomReducer";
 import { roomAction } from "../utils/actions";
-import { axiosToken } from "../apis/createInstance";
+import { axiosToken, axiosNormal } from "../apis/createInstance";
 
 export const RoomContext = createContext();
 
@@ -18,7 +18,7 @@ export const RoomProvider = ({ children }) => {
   const getRoom = async (id) => {
     dispatch({ type: roomAction.GET_ROOM_BEGIN });
     try {
-      const res = await axiosToken.get(`room/${id}`);
+      const res = await axiosNormal.get(`room/${id}`);
       dispatch({ type: roomAction.GET_ROOM_SUCCESS, payload: res.data });
     } catch (error) {
       dispatch({ type: roomAction.GET_ROOM_ERROR });
@@ -27,37 +27,35 @@ export const RoomProvider = ({ children }) => {
   const getListRoom = async () => {
     dispatch({ type: roomAction.GET_LISTROOM_BEGIN });
     try {
-      const res = await axiosToken.get(`room`);
+      const res = await axiosNormal.get(`room`);
       dispatch({ type: roomAction.GET_LISTROOM_SUCCESS, payload: res.data });
     } catch (error) {
       dispatch({ type: roomAction.GET_LISTROOM_ERROR });
     }
   };
-  const updateRoom = async (id, data) => {
-    dispatch({ type: roomAction.GET_ROOM_BEGIN });
+  const updateRoom = async (data) => {
     try {
-      const res = await axiosToken.patch(`room/${id}`, data);
-      dispatch({ type: roomAction.GET_ROOM_SUCCESS, payload: res.data });
+      const res = await axiosNormal.patch(`room/${data._id}`, data);
+      // dispatch({ type: roomAction.GET_ROOM_SUCCESS, payload: res.data });
+      dispatch({ type: roomAction.UPDATE_ROOM, payload: data });
     } catch (error) {
-      dispatch({ type: roomAction.GET_ROOM_ERROR });
+      // dispatch({ type: roomAction.GET_ROOM_ERROR });
     }
   };
-  const deleteRoom = async (id) => {
-    dispatch({ type: roomAction.GET_LISTROOM_BEGIN });
+  const deleteRoom = async (item) => {
     try {
-      const res = await axiosToken.delete(`room/${id}`);
-      dispatch({ type: roomAction.GET_LISTROOM_SUCCESS, payload: res.data });
+      await axiosNormal.delete(`room/${item?._id}`);
+      dispatch({ type: roomAction.DELETE_ROOM, payload: item });
     } catch (error) {
-      dispatch({ type: roomAction.GET_LISTROOM_ERROR });
+      console.log(error);
     }
   };
   const addRoom = async (data) => {
-    dispatch({ type: roomAction.GET_LISTROOM_BEGIN });
     try {
-      const res = await axiosToken.post(`room`, data);
-      dispatch({ type: roomAction.GET_LISTROOM_SUCCESS, payload: res.data });
+      const res = await axiosNormal.post(`room`, data);
+      dispatch({ type: roomAction.ADD_ROOM, payload: res.data });
     } catch (error) {
-      dispatch({ type: roomAction.GET_LISTROOM_ERROR });
+      console.log(error);
     }
   };
 

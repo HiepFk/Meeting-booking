@@ -1,16 +1,25 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Top from "../components/User/Top";
 import Filter from "../components/User/Filter";
 import TableUser from "../components/User/TableUser";
 import styled from "styled-components";
+import { DepartmentContext } from "../context/departmentContext";
 
 function User() {
+  const [reFesh, setReFesh] = useState(false);
+  const { getListDepartment } = useContext(DepartmentContext);
+
+  useEffect(() => {
+    getListDepartment();
+    // eslint-disable-next-line
+  }, []);
+
   return (
     <Wrapper>
       <div className="wrapper">
-        <Top />
+        <Top setReFesh={setReFesh} reFesh={reFesh} />
         <Filter />
-        <TableUser />
+        <TableUser reFesh={reFesh} setReFesh={setReFesh} />
       </div>
     </Wrapper>
   );
@@ -19,7 +28,6 @@ const Wrapper = styled.div`
   padding: 5rem 1.5rem 2rem;
   z-index: 2;
   background-color: #ddd;
-
   .wrapper {
     margin-top: 2rem;
     padding: 1rem;

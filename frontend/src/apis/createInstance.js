@@ -21,6 +21,7 @@ const refreshToken = async () => {
 };
 
 export const axiosToken = (accessToken) => {
+  console.log(1);
   const newInstance = axiosNormal;
   newInstance.interceptors.request.use(
     async (config) => {

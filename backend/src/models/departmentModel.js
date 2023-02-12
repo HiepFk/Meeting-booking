@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const departmentSchema = new mongoose.Schema(
   {
-    nam: String,
+    name: String,
     desc: String,
   },
   {

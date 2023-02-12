@@ -10,11 +10,15 @@ const userSchema = new mongoose.Schema(
       lowcase: true,
     },
     photo: String,
-    group: {
+    department: {
       type: mongoose.Schema.ObjectId,
       ref: "Department",
     },
     isAdmin: {
+      type: Boolean,
+      default: false,
+    },
+    isAuthRoomVip: {
       type: Boolean,
       default: false,
     },
@@ -30,7 +34,7 @@ const userSchema = new mongoose.Schema(
 
 userSchema.pre(/^find/, function (next) {
   this.populate({
-    path: "group",
+    path: "department",
     select: "name",
   });
   next();

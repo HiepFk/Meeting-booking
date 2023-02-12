@@ -4,13 +4,12 @@ import { BsTrashFill } from "react-icons/bs";
 import { MdEdit } from "react-icons/md";
 import { FaTimes } from "react-icons/fa";
 import { BiCheckCircle } from "react-icons/bi";
-import { UserContext } from "../../context/userContext";
+import { RoomContext } from "../../context/roomContext";
 import Loading from "../Loading";
-import ModalUser from "./ModalUser";
-function TableUser({ reFesh, setReFesh }) {
-  const { listUser, getListUser, loading, deleteUser } =
-    useContext(UserContext);
-
+import ModalRoom from "./ModalRoom";
+function TableRoom({ reFesh, tab }) {
+  const { listRoom, getListRoom, loading, deleteRoom } =
+    useContext(RoomContext);
   const [show, setShow] = useState(false);
   const [item, setItem] = useState(null);
 
@@ -20,66 +19,68 @@ function TableUser({ reFesh, setReFesh }) {
   };
 
   useEffect(() => {
-    getListUser();
-  }, [reFesh]);
+    if (tab === "room") {
+      getListRoom();
+    }
+  }, [reFesh, tab]);
 
   if (loading) {
     return <Loading />;
   }
-  if (listUser?.length === 0) {
+  if (listRoom?.length === 0) {
     return <>None</>;
   }
-
   return (
     <>
-      <ModalUser
-        show={show}
-        setShow={setShow}
-        user={item}
-        reFesh={reFesh}
-        setReFesh={setReFesh}
-      />
-
+      <ModalRoom show={show} setShow={setShow} room={item} />
       <Table striped bordered hover className="text-center">
         <thead>
           <tr>
             <th>#</th>
             <th>Name</th>
-            <th>User Name</th>
-            <th>Email</th>
-            <th>Group</th>
-            <th>Created at</th>
-            <th>Admin role</th>
-            <th>Auth room vip</th>
+            <th>Size</th>
+            <th>Color</th>
+            <th>Peripheral device</th>
+            <th>Vip</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          {listUser?.map((item, index) => {
+          {listRoom?.map((item, index) => {
             return (
               <tr key={item?._id}>
                 <td>{index + 1}</td>
                 <td>{item?.name}</td>
-                <td>{item?.userName}</td>
-                <td>{item?.email}</td>
-                <td>{item?.department?.name}</td>
-                <td>{new Date(item?.createdAt).toLocaleString("en-US")}</td>
+                <td>{item?.size}</td>
+                <td style={{ position: "relative" }}>
+                  <p
+                    style={{
+                      width: "1rem",
+                      height: "1rem",
+                      backgroundColor: `${item?.color}`,
+                      position: "absolute",
+                      top: "50%",
+                      left: " 50%",
+                      transform: "translate(-50%, -50%)",
+                    }}
+                  ></p>
+                </td>
                 <td>
-                  {item?.isAdmin ? (
+                  {item?.hasDevice ? (
+                    <FaTimes style={{ opacity: "0.8" }} />
+                  ) : (
                     <BiCheckCircle
                       style={{ color: "green", fontSize: "1.25rem" }}
                     />
-                  ) : (
-                    <FaTimes style={{ opacity: "0.8" }} />
                   )}
                 </td>
                 <td>
-                  {item?.isAuthRoomVip ? (
+                  {item?.isVip ? (
+                    <FaTimes style={{ opacity: "0.8" }} />
+                  ) : (
                     <BiCheckCircle
                       style={{ color: "green", fontSize: "1.25rem" }}
                     />
-                  ) : (
-                    <FaTimes style={{ opacity: "0.8" }} />
                   )}
                 </td>
                 <td>
@@ -90,7 +91,7 @@ function TableUser({ reFesh, setReFesh }) {
                   />
                   <BsTrashFill
                     className="icon"
-                    onClick={() => deleteUser(item)}
+                    onClick={() => deleteRoom(item)}
                   />
                 </td>
               </tr>
@@ -102,4 +103,4 @@ function TableUser({ reFesh, setReFesh }) {
   );
 }
 
-export default TableUser;
+export default TableRoom;

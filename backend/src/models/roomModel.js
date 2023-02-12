@@ -9,11 +9,11 @@ const roomSchema = new mongoose.Schema(
       type: Number,
     },
     color: String,
-    peripheralDevice: {
+    hasDevice: {
       type: Boolean,
       default: false,
     },
-    roomVip: {
+    isVip: {
       type: Boolean,
       default: false,
     },

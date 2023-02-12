@@ -83,13 +83,6 @@ const handlerFactory = {
     }),
   updateOne: (Model) =>
     catchAsync(async (req, res, next) => {
-      if (
-        req.body.passwordConfirm &&
-        req.body.passwordConfirm !== req.body.password
-      ) {
-        return next(new AppError("Password Confirm not same", 500));
-      }
-
       const data = await Model.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
         runValidators: true,

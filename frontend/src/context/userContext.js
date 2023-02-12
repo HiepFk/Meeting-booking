@@ -1,11 +1,11 @@
 import { createContext, useReducer } from "react";
 import userReducer from "../reducers/userReducer";
 import { userAction } from "../utils/actions";
-import { axiosToken } from "../apis/createInstance";
+import { axiosToken, axiosNormal } from "../apis/createInstance";
 
-export const RoomContext = createContext();
+export const UserContext = createContext();
 
-export const RoomProvider = ({ children }) => {
+export const UserProvider = ({ children }) => {
   const initialState = {
     user: null,
     listUser: [],
@@ -18,7 +18,7 @@ export const RoomProvider = ({ children }) => {
   const getUser = async (id) => {
     dispatch({ type: userAction.GET_USER_BEGIN });
     try {
-      const res = await axiosToken.get(`user/${id}`);
+      const res = await axiosNormal.get(`user/${id}`);
       dispatch({ type: userAction.GET_USER_SUCCESS, payload: res.data });
     } catch (error) {
       dispatch({ type: userAction.GET_USER_ERROR });
@@ -27,42 +27,47 @@ export const RoomProvider = ({ children }) => {
   const getListUser = async () => {
     dispatch({ type: userAction.GET_LISTUSER_BEGIN });
     try {
-      const res = await axiosToken.get(`user`);
+      const res = await axiosNormal.get(`user`);
       dispatch({ type: userAction.GET_LISTUSER_SUCCESS, payload: res.data });
     } catch (error) {
       dispatch({ type: userAction.GET_LISTUSER_ERROR });
     }
   };
-  const updateUser = async (id, data) => {
-    dispatch({ type: userAction.GET_USER_BEGIN });
+  const updateUser = async (data) => {
+    // dispatch({ type: userAction.GET_USER_BEGIN });
     try {
-      const res = await axiosToken.patch(`user/${id}`, data);
-      dispatch({ type: userAction.GET_USER_SUCCESS, payload: res.data });
+      const res = await axiosNormal.patch(`user/${data._id}`, data);
+      // dispatch({ type: userAction.GET_USER_SUCCESS, payload: res.data });
+      // dispatch({ type: userAction.UPDATE_USER, payload: data });
     } catch (error) {
-      dispatch({ type: userAction.GET_USER_ERROR });
+      console.log(error);
+      // dispatch({ type: userAction.GET_USER_ERROR });
     }
   };
-  const deleteUser = async (id) => {
-    dispatch({ type: userAction.GET_LISTUSER_BEGIN });
+  const deleteUser = async (item) => {
+    // dispatch({ type: userAction.GET_LISTUSER_BEGIN });
     try {
-      const res = await axiosToken.delete(`user/${id}`);
-      dispatch({ type: userAction.GET_LISTUSER_SUCCESS, payload: res.data });
+      const res = await axiosNormal.delete(`user/${item?._id}`);
+      // dispatch({ type: userAction.GET_LISTUSER_SUCCESS, payload: res.data });
+      dispatch({ type: userAction.DELETE_USER, payload: item });
     } catch (error) {
-      dispatch({ type: userAction.GET_LISTUSER_ERROR });
+      console.log(error);
+      // dispatch({ type: userAction.GET_LISTUSER_ERROR });
     }
   };
   const addUser = async (data) => {
-    dispatch({ type: userAction.GET_LISTUSER_BEGIN });
+    // dispatch({ type: userAction.GET_LISTUSER_BEGIN });
     try {
-      const res = await axiosToken.post(`user`, data);
-      dispatch({ type: userAction.GET_LISTUSER_SUCCESS, payload: res.data });
+      const res = await axiosNormal.post(`user`, data);
+      // dispatch({ type: userAction.GET_LISTUSER_SUCCESS, payload: res.data });
+      dispatch({ type: userAction.ADD_USER, payload: res.data });
     } catch (error) {
-      dispatch({ type: userAction.GET_LISTUSER_ERROR });
+      // dispatch({ type: userAction.GET_LISTUSER_ERROR });
     }
   };
 
   return (
-    <RoomContext.Provider
+    <UserContext.Provider
       value={{
         ...state,
         getUser,
@@ -73,8 +78,8 @@ export const RoomProvider = ({ children }) => {
       }}
     >
       {children}
-    </RoomContext.Provider>
+    </UserContext.Provider>
   );
 };
 
-export default RoomProvider;
+export default UserProvider;

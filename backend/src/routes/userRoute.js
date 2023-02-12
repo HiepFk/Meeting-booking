@@ -8,11 +8,11 @@ router.get("/logout", authController.logout);
 
 router.post("/refresh", authController.requestRefreshToken);
 
-router.use(isAuthenticatedUser);
+// router.use(isAuthenticatedUser);
 router.get("/me", userController.getMe);
 router.patch("/updateInfo", userController.updateMe);
 
-router.use(isAdmin);
+// router.use(isAdmin);
 
 router
   .route("/")

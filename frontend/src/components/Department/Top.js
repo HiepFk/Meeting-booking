@@ -1,23 +1,19 @@
 import React, { useState } from "react";
-import Button from "react-bootstrap/Button";
-import styled from "styled-components";
 import { MdRefresh } from "react-icons/md";
-import ModalUser from "./ModalUser";
+import styled from "styled-components";
+import ModalDepartment from "./ModalDepartment";
+import Button from "react-bootstrap/Button";
+
 function Top({ setReFesh, reFesh }) {
   const [show, setShow] = useState(false);
 
   return (
     <Wrapper>
-      <ModalUser
-        show={show}
-        setShow={setShow}
-        reFesh={reFesh}
-        setReFesh={setReFesh}
-      />
+      <ModalDepartment show={show} setShow={setShow} />
       <Button variant="primary" onClick={() => setShow(true)}>
-        Add new user
+        Add new department
       </Button>
-      <div className="top_title">Users Manager</div>
+      <div className="top_title">Departments Manager</div>
       <div className="top_icon" onClick={() => setReFesh(!reFesh)}>
         <MdRefresh />
       </div>

@@ -1,111 +1,115 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
-function ModalUser() {
-  const [show, setShow] = useState(false);
+import InputGroup from "react-bootstrap/InputGroup";
+import Input from "../Input";
+import Checkbox from "../Checkbox";
+import { UserContext } from "../../context/userContext";
+import { DepartmentContext } from "../../context/departmentContext";
+function ModalUser({ show, setShow, user, reFesh, setReFesh }) {
+  const { addUser, updateUser } = useContext(UserContext);
+  const { listDepartment } = useContext(DepartmentContext);
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-  const arrDay = ["ALL", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const [name, setName] = useState("");
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [department, setDepartment] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAuthRoomVip, setIsAuthRoomVip] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setName(user?.name);
+      setUserName(user?.userName);
+      setEmail(user?.email);
+      setDepartment(user?.department);
+      setIsAdmin(user?.isAdmin);
+      setIsAuthRoomVip(user?.isAuthRoomVip);
+    }
+  }, [user]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const data = {
+      _id: user?._id,
+      name,
+      userName,
+      email,
+      department: department?._id,
+      isAdmin,
+      isAuthRoomVip,
+    };
+    if (user) {
+      updateUser(data);
+    } else {
+      addUser(data);
+    }
+    setShow(false);
+    setReFesh(!reFesh);
+  };
+
   return (
-    <>
-      <Button variant="primary" onClick={handleShow}>
-        Add new user
-      </Button>
-
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add User</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Summary</Form.Label>
-              <Form.Control type="text" placeholder="Enter summary" />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Email</Form.Label>
-              <Form.Control type="email" placeholder="Enter email" />
-            </Form.Group>
-            <div className="d-flex justify-content-between">
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Group</Form.Label>
-                <DropdownButton
-                  variant="outline-secondary"
-                  title="Dropdown"
-                  id="input-group-dropdown-1"
-                >
-                  <Dropdown.Item href="#">Action</Dropdown.Item>
-                  <Dropdown.Item href="#">Another action</Dropdown.Item>
-                  <Dropdown.Item href="#">Something else here</Dropdown.Item>
-                  <Dropdown.Divider />
-                  <Dropdown.Item href="#">Separated link</Dropdown.Item>
-                </DropdownButton>
-              </Form.Group>
-              <Form.Group className="mb-3 " controlId="formBasicEmail">
-                <Form.Label>Room</Form.Label>
-                <DropdownButton
-                  variant="outline-secondary"
-                  title="Dropdown"
-                  id="input-group-dropdown-1"
-                >
-                  <Dropdown.Item href="#">Action</Dropdown.Item>
-                  <Dropdown.Item href="#">Another action</Dropdown.Item>
-                  <Dropdown.Item href="#">Something else here</Dropdown.Item>
-                  <Dropdown.Divider />
-                  <Dropdown.Item href="#">Separated link</Dropdown.Item>
-                </DropdownButton>
-              </Form.Group>
-            </div>
-            <div className="d-flex justify-content-between">
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Start</Form.Label>
-                <Form.Control type="time" placeholder="Enter summary" />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>End</Form.Label>
-                <Form.Control type="time" placeholder="Enter summary" />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Day</Form.Label>
-                <Form.Control type="date" placeholder="Enter summary" />
-              </Form.Group>
-            </div>
-
-            <Form.Group className="mb-3 d-flex" controlId="formBasicCheckbox">
-              <Form.Label className="ml-3">Repeat</Form.Label>
-              <Form.Check type="checkbox" className="ml-3" />
-            </Form.Group>
-            <Form.Group className="mb-3 d-flex" controlId="formBasicCheckbox">
-              {arrDay?.map((item, index) => {
-                return <Form.Check type="checkbox" label={item} key={index} />;
+    <Modal show={show} onHide={handleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>
+          {user ? "Update" : "Add"}
+          User
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form>
+          <Input data={name} setData={setName} label="Name" type="text" />
+          <Input
+            data={userName}
+            setData={setUserName}
+            label="User name"
+            type="text"
+          />
+          <Input data={email} setData={setEmail} label="Email" type="email" />
+          <InputGroup className="mb-3" controlId="formBasicEmail">
+            <DropdownButton
+              variant="outline-secondary"
+              title="Department"
+              id="input-group-dropdown-1"
+            >
+              {listDepartment?.map((item) => {
+                return (
+                  <Dropdown.Item
+                    key={item?._id}
+                    // onClick={handeChangeDepartment(item)}
+                    onClick={(e) => setDepartment(item)}
+                  >
+                    {item?.name}
+                  </Dropdown.Item>
+                );
               })}
-            </Form.Group>
-            <div className="d-flex justify-content-between">
-              <Form.Group className="mb-3">
-                <Form.Label>From Date</Form.Label>
-                <Form.Control type="date" />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>End Date</Form.Label>
-                <Form.Control type="date" />
-              </Form.Group>
-            </div>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={handleClose}>
-            Add
-          </Button>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+            </DropdownButton>
+            <Form.Control
+              aria-label="Text input with dropdown button"
+              value={department?.name}
+            />
+          </InputGroup>
+          <Checkbox data={isAdmin} setData={setIsAdmin} label="Admin role" />
+          <Checkbox
+            data={isAuthRoomVip}
+            setData={setIsAuthRoomVip}
+            label="Auth room vip"
+          />
+        </Form>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="primary" onClick={handleSubmit}>
+          {user ? "Update" : "Add"}
+        </Button>
+        <Button variant="secondary" onClick={handleClose}>
+          Close
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 }
 
