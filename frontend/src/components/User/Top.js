@@ -1,24 +1,22 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Button from "react-bootstrap/Button";
 import styled from "styled-components";
 import { MdRefresh } from "react-icons/md";
 import ModalUser from "./ModalUser";
-function Top({ setReFesh, reFesh }) {
+import { UserContext } from "../../context/userContext";
+function Top() {
+  const { handeChangeReFresh } = useContext(UserContext);
+
   const [show, setShow] = useState(false);
 
   return (
     <Wrapper>
-      <ModalUser
-        show={show}
-        setShow={setShow}
-        reFesh={reFesh}
-        setReFesh={setReFesh}
-      />
+      <ModalUser show={show} setShow={setShow} />
       <Button variant="primary" onClick={() => setShow(true)}>
         Add new user
       </Button>
       <div className="top_title">Users Manager</div>
-      <div className="top_icon" onClick={() => setReFesh(!reFesh)}>
+      <div className="top_icon" onClick={() => handeChangeReFresh()}>
         <MdRefresh />
       </div>
     </Wrapper>

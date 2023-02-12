@@ -1,16 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import Top from "../components/Room/Top";
 import Filter from "../components/Room/Filter";
 import TableRoom from "../components/Room/TableRoom";
 import styled from "styled-components";
 
 function Room({ tab }) {
-  const [reFesh, setReFesh] = useState(false);
   return (
     <Wrapper>
-      <Top setReFesh={setReFesh} reFesh={reFesh} />
+      <Top />
       <Filter />
-      <TableRoom reFesh={reFesh} tab={tab} />
+      <TableRoom tab={tab} />
     </Wrapper>
   );
 }

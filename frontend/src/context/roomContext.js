@@ -7,23 +7,20 @@ export const RoomContext = createContext();
 
 export const RoomProvider = ({ children }) => {
   const initialState = {
-    room: null,
     listRoom: [],
     loading: false,
     error: false,
+    reFresh: false,
   };
 
   const [state, dispatch] = useReducer(roomReducer, initialState);
 
-  const getRoom = async (id) => {
-    dispatch({ type: roomAction.GET_ROOM_BEGIN });
-    try {
-      const res = await axiosNormal.get(`room/${id}`);
-      dispatch({ type: roomAction.GET_ROOM_SUCCESS, payload: res.data });
-    } catch (error) {
-      dispatch({ type: roomAction.GET_ROOM_ERROR });
-    }
+  const handeChangeReFresh = () => {
+    dispatch({
+      type: roomAction.REFRESH,
+    });
   };
+
   const getListRoom = async () => {
     dispatch({ type: roomAction.GET_LISTROOM_BEGIN });
     try {
@@ -36,10 +33,12 @@ export const RoomProvider = ({ children }) => {
   const updateRoom = async (data) => {
     try {
       const res = await axiosNormal.patch(`room/${data._id}`, data);
-      // dispatch({ type: roomAction.GET_ROOM_SUCCESS, payload: res.data });
-      dispatch({ type: roomAction.UPDATE_ROOM, payload: data });
+      // dispatch({ type: roomAction.UPDATE_ROOM, payload: data });
+      dispatch({
+        type: roomAction.REFRESH,
+      });
     } catch (error) {
-      // dispatch({ type: roomAction.GET_ROOM_ERROR });
+      console.log(error);
     }
   };
   const deleteRoom = async (item) => {
@@ -63,11 +62,11 @@ export const RoomProvider = ({ children }) => {
     <RoomContext.Provider
       value={{
         ...state,
-        getRoom,
         getListRoom,
         updateRoom,
         deleteRoom,
         addRoom,
+        handeChangeReFresh,
       }}
     >
       {children}

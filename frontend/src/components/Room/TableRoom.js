@@ -7,8 +7,8 @@ import { BiCheckCircle } from "react-icons/bi";
 import { RoomContext } from "../../context/roomContext";
 import Loading from "../Loading";
 import ModalRoom from "./ModalRoom";
-function TableRoom({ reFesh, tab }) {
-  const { listRoom, getListRoom, loading, deleteRoom } =
+function TableRoom({ tab }) {
+  const { listRoom, getListRoom, loading, deleteRoom, reFresh } =
     useContext(RoomContext);
   const [show, setShow] = useState(false);
   const [item, setItem] = useState(null);
@@ -22,7 +22,7 @@ function TableRoom({ reFesh, tab }) {
     if (tab === "room") {
       getListRoom();
     }
-  }, [reFesh, tab]);
+  }, [reFresh, tab]);
 
   if (loading) {
     return <Loading />;

@@ -6,7 +6,8 @@ import { DepartmentContext } from "../../context/departmentContext";
 import Input from "../Input";
 
 function ModalDepartment({ show, setShow, department }) {
-  const { addDepartment, updateDepartment } = useContext(DepartmentContext);
+  const { addDepartment, updateDepartment, handeChangeReFresh } =
+    useContext(DepartmentContext);
 
   const handleClose = () => setShow(false);
   const [name, setName] = useState("");
@@ -25,6 +26,7 @@ function ModalDepartment({ show, setShow, department }) {
     };
     if (department) {
       updateDepartment(data);
+      handeChangeReFresh();
     } else {
       addDepartment(data);
     }

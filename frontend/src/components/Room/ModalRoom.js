@@ -7,7 +7,7 @@ import { RoomContext } from "../../context/roomContext";
 import Input from "../Input";
 
 function ModalRoom({ show, setShow, room }) {
-  const { addRoom, updateRoom } = useContext(RoomContext);
+  const { addRoom, updateRoom, handeChangeReFresh } = useContext(RoomContext);
   const handleClose = () => setShow(false);
 
   const [name, setName] = useState("");
@@ -38,6 +38,7 @@ function ModalRoom({ show, setShow, room }) {
     };
     if (room) {
       updateRoom(data);
+      handeChangeReFresh();
     } else {
       addRoom(data);
     }

@@ -6,9 +6,14 @@ import { DepartmentContext } from "../../context/departmentContext";
 import Loading from "../Loading";
 import ModalDepartment from "./ModalDepartment";
 
-function TableDepartment({ reFesh, tab }) {
-  const { listDepartment, getListDepartment, loading, deleteDepartment } =
-    useContext(DepartmentContext);
+function TableDepartment({ tab }) {
+  const {
+    listDepartment,
+    getListDepartment,
+    loading,
+    deleteDepartment,
+    reFresh,
+  } = useContext(DepartmentContext);
 
   const [show, setShow] = useState(false);
   const [item, setItem] = useState(null);
@@ -22,7 +27,7 @@ function TableDepartment({ reFesh, tab }) {
     if (tab === "department") {
       getListDepartment();
     }
-  }, [reFesh, tab]);
+  }, [reFresh, tab]);
 
   if (loading) {
     return <Loading />;

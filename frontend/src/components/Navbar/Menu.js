@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { menu_user, menu_admin } from "../../utils/menu";
 function Menu({ role }) {
-  // const [menu, setMenu] = useState(role ? menu_admin : menu_user);
-  const [menu, setMenu] = useState(menu_admin);
+  const [menu] = useState(role ? menu_admin : menu_user);
   const [active, setActive] = useState(1);
   return (
     <MenyStyle>

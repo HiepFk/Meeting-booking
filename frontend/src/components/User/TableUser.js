@@ -7,8 +7,8 @@ import { BiCheckCircle } from "react-icons/bi";
 import { UserContext } from "../../context/userContext";
 import Loading from "../Loading";
 import ModalUser from "./ModalUser";
-function TableUser({ reFesh, setReFesh }) {
-  const { listUser, getListUser, loading, deleteUser } =
+function TableUser() {
+  const { listUser, getListUser, loading, deleteUser, reFresh } =
     useContext(UserContext);
 
   const [show, setShow] = useState(false);
@@ -21,7 +21,7 @@ function TableUser({ reFesh, setReFesh }) {
 
   useEffect(() => {
     getListUser();
-  }, [reFesh]);
+  }, [reFresh]);
 
   if (loading) {
     return <Loading />;
@@ -32,13 +32,7 @@ function TableUser({ reFesh, setReFesh }) {
 
   return (
     <>
-      <ModalUser
-        show={show}
-        setShow={setShow}
-        user={item}
-        reFesh={reFesh}
-        setReFesh={setReFesh}
-      />
+      <ModalUser show={show} setShow={setShow} user={item} />
 
       <Table striped bordered hover className="text-center">
         <thead>

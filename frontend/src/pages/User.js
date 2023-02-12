@@ -6,7 +6,6 @@ import styled from "styled-components";
 import { DepartmentContext } from "../context/departmentContext";
 
 function User() {
-  const [reFesh, setReFesh] = useState(false);
   const { getListDepartment } = useContext(DepartmentContext);
 
   useEffect(() => {
@@ -17,9 +16,9 @@ function User() {
   return (
     <Wrapper>
       <div className="wrapper">
-        <Top setReFesh={setReFesh} reFesh={reFesh} />
+        <Top />
         <Filter />
-        <TableUser reFesh={reFesh} setReFesh={setReFesh} />
+        <TableUser />
       </div>
     </Wrapper>
   );

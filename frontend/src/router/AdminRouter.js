@@ -1,17 +1,17 @@
-import React from "react";
-import { Route, Routes } from "react-router-dom";
-import Department from "../pages/Department";
-import Home from "../pages/Home";
-import Room from "../pages/Room";
-import User from "../pages/User";
-
+import React, { useContext, useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/authContext";
 function AdminRouter() {
+  const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+  useEffect(() => {
+    if (!user?.isAdmin) {
+      navigate("/");
+    }
+  }, [navigate, user]);
   return (
     <>
-      <Route exact path="/" element={<Home />} />
-      <Route exact path="user" element={<User />} />
-      <Route exact path="room" element={<Room />} />
-      <Route exact path="department" element={<Department />} />
+      <Outlet />
     </>
   );
 }

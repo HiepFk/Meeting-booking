@@ -5,12 +5,11 @@ import TableDepartment from "../components/Department/TableDepartment";
 import styled from "styled-components";
 
 function Department({ tab }) {
-  const [reFesh, setReFesh] = useState(false);
   return (
     <Wrapper>
-      <Top setReFesh={setReFesh} reFesh={reFesh} />
+      <Top />
       <Filter />
-      <TableDepartment reFesh={reFesh} tab={tab} />
+      <TableDepartment tab={tab} />
     </Wrapper>
   );
 }

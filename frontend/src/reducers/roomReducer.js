@@ -2,27 +2,11 @@ import { roomAction } from "../utils/actions";
 
 const roomReducer = (state, action) => {
   switch (action.type) {
-    case roomAction.GET_ROOM_BEGIN: {
+    case roomAction.REFRESH: {
+      const { reFresh } = state;
       return {
         ...state,
-        loading: true,
-        error: false,
-        room: null,
-      };
-    }
-    case roomAction.GET_ROOM_SUCCESS: {
-      return {
-        ...state,
-        loading: false,
-        error: false,
-        room: action.payload,
-      };
-    }
-    case roomAction.GET_ROOM_ERROR: {
-      return {
-        ...state,
-        loading: false,
-        error: true,
+        reFresh: !reFresh,
       };
     }
     case roomAction.GET_LISTROOM_BEGIN: {

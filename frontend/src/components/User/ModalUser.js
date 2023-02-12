@@ -9,8 +9,8 @@ import Input from "../Input";
 import Checkbox from "../Checkbox";
 import { UserContext } from "../../context/userContext";
 import { DepartmentContext } from "../../context/departmentContext";
-function ModalUser({ show, setShow, user, reFesh, setReFesh }) {
-  const { addUser, updateUser } = useContext(UserContext);
+function ModalUser({ show, setShow, user }) {
+  const { addUser, updateUser, handeChangeReFresh } = useContext(UserContext);
   const { listDepartment } = useContext(DepartmentContext);
 
   const handleClose = () => setShow(false);
@@ -49,7 +49,7 @@ function ModalUser({ show, setShow, user, reFesh, setReFesh }) {
       addUser(data);
     }
     setShow(false);
-    setReFesh(!reFesh);
+    handeChangeReFresh();
   };
 
   return (

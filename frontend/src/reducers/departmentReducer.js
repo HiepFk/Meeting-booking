@@ -1,27 +1,11 @@
 import { departmentAction } from "../utils/actions";
 const departmentReducer = (state, action) => {
   switch (action.type) {
-    case departmentAction.GET_DEPARTMENT_BEGIN: {
+    case departmentAction.REFRESH: {
+      const { reFresh } = state;
       return {
         ...state,
-        loading: true,
-        error: false,
-        department: null,
-      };
-    }
-    case departmentAction.GET_DEPARTMENT_SUCCESS: {
-      return {
-        ...state,
-        loading: false,
-        error: false,
-        department: action.payload,
-      };
-    }
-    case departmentAction.GET_DEPARTMENT_ERROR: {
-      return {
-        ...state,
-        loading: false,
-        error: true,
+        reFresh: !reFresh,
       };
     }
     case departmentAction.GET_LISTDEPARTMENT_BEGIN: {

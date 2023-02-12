@@ -7,26 +7,20 @@ export const DepartmentContext = createContext();
 
 export const DepartmentProvider = ({ children }) => {
   const initialState = {
-    department: null,
     listDepartment: [],
     loading: false,
     error: false,
+    reFresh: false,
   };
 
   const [state, dispatch] = useReducer(departmentReducer, initialState);
 
-  const getDepartment = async (id) => {
-    dispatch({ type: departmentAction.GET_DEPARTMENT_BEGIN });
-    try {
-      const res = await axiosNormal.get(`department/${id}`);
-      dispatch({
-        type: departmentAction.GET_DEPARTMENT_SUCCESS,
-        payload: res.data,
-      });
-    } catch (error) {
-      dispatch({ type: departmentAction.GET_DEPARTMENT_ERROR });
-    }
+  const handeChangeReFresh = () => {
+    dispatch({
+      type: departmentAction.REFRESH,
+    });
   };
+
   const getListDepartment = async () => {
     dispatch({ type: departmentAction.GET_LISTDEPARTMENT_BEGIN });
     try {
@@ -40,20 +34,13 @@ export const DepartmentProvider = ({ children }) => {
     }
   };
   const updateDepartment = async (data) => {
-    // dispatch({ type: departmentAction.GET_DEPARTMENT_BEGIN });
     try {
       const res = await axiosNormal.patch(`department/${data._id}`, data);
-      // dispatch({
-      //   type: departmentAction.GET_DEPARTMENT_SUCCESS,
-      //   payload: res.data,
-      // });
       dispatch({
-        type: departmentAction.UPDATE_DEPARTMENT,
-        payload: data,
+        type: departmentAction.REFRESH,
       });
     } catch (error) {
       console.log(error);
-      // dispatch({ type: departmentAction.GET_DEPARTMENT_ERROR });
     }
   };
   const deleteDepartment = async (item) => {
@@ -83,11 +70,11 @@ export const DepartmentProvider = ({ children }) => {
     <DepartmentContext.Provider
       value={{
         ...state,
-        getDepartment,
         getListDepartment,
         updateDepartment,
         deleteDepartment,
         addDepartment,
+        handeChangeReFresh,
       }}
     >
       {children}

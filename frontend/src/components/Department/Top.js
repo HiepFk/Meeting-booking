@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { MdRefresh } from "react-icons/md";
 import styled from "styled-components";
 import ModalDepartment from "./ModalDepartment";
 import Button from "react-bootstrap/Button";
+import { DepartmentContext } from "../../context/departmentContext";
 
 function Top({ setReFesh, reFesh }) {
+  const { handeChangeReFresh } = useContext(DepartmentContext);
+
   const [show, setShow] = useState(false);
 
   return (
@@ -14,7 +17,7 @@ function Top({ setReFesh, reFesh }) {
         Add new department
       </Button>
       <div className="top_title">Departments Manager</div>
-      <div className="top_icon" onClick={() => setReFesh(!reFesh)}>
+      <div className="top_icon" onClick={() => handeChangeReFresh()}>
         <MdRefresh />
       </div>
     </Wrapper>
