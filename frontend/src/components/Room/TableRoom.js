@@ -66,7 +66,7 @@ function TableRoom({ tab }) {
                   ></p>
                 </td>
                 <td>
-                  {item?.hasDevice ? (
+                  {!item?.hasDevice ? (
                     <FaTimes style={{ opacity: "0.8" }} />
                   ) : (
                     <BiCheckCircle
@@ -75,7 +75,7 @@ function TableRoom({ tab }) {
                   )}
                 </td>
                 <td>
-                  {item?.isVip ? (
+                  {!item?.isVip ? (
                     <FaTimes style={{ opacity: "0.8" }} />
                   ) : (
                     <BiCheckCircle

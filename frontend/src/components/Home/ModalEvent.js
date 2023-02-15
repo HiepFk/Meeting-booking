@@ -29,6 +29,8 @@ function ModalEvent({ show, setShow, event }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // console.log(new Date(day + "T" + start));
+    // console.log(typeof new Date(day + "T" + start));
     const data = {
       _id: event?._id,
       title,
@@ -45,7 +47,8 @@ function ModalEvent({ show, setShow, event }) {
     } else {
       addEvent(data);
     }
-    setShow(false);
+    console.log(data.start, data.end);
+    // setShow(false);
   };
 
   const handeDelete = (item) => {

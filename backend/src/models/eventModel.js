@@ -16,8 +16,8 @@ const eventSchema = new mongoose.Schema(
     },
     colorEvento: String,
     day: String,
-    start: Object,
-    end: Object,
+    start: Date,
+    end: Date,
 
     isRepeat: {
       type: Boolean,

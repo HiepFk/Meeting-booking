@@ -41,11 +41,17 @@ const eventReducer = (state, action) => {
       };
     }
     case eventAction.GET_LISTEVENT_SUCCESS: {
+      let listEvent = action.payload?.data;
+      const newlistEvent = listEvent?.map((event) => {
+        event.start = new Date(event?.start);
+        event.end = new Date(event?.end);
+        return event;
+      });
       return {
         ...state,
         loading: false,
         error: false,
-        listEvent: action.payload?.data,
+        listEvent: [...newlistEvent],
       };
     }
     case eventAction.GET_LISTEVENT_ERROR: {
