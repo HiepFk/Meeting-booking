@@ -1,11 +1,14 @@
 import Header from "./components/Header";
 import Navbar from "./components/Navbar";
+import Canlendar from "./components/Canlendar";
 function App() {
   return (
-    <>
-      <Header />
-      <Navbar />
-    </>
+    <Canlendar />
+
+    // {/* <>
+    //   <Header />
+    //   <Navbar />
+    // </> */}
   );
 }
 
