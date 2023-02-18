@@ -1,12 +1,10 @@
 import React from "react";
-import Filter from "../components/Home/Filter";
-import Main from "../components/Home/Main";
+import Canlendar from "../components/Home/Canlendar";
 import styled from "styled-components";
 function Home() {
   return (
     <Wrapper>
-      <Filter />
-      <Main />
+      <Canlendar />
     </Wrapper>
   );
 }
