@@ -65,7 +65,7 @@ function TableDepartment({ tab }) {
                   />
                   <BsTrashFill
                     className="icon"
-                    onClick={() => deleteDepartment(item)}
+                    onClick={() => deleteDepartment(axiosCustom, item)}
                   />
                 </td>
               </tr>

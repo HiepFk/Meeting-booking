@@ -54,7 +54,7 @@ function ModalEvent({ show, setShow, event }) {
   };
 
   const handeDelete = (item) => {
-    deleteEvent(item);
+    deleteEvent(axiosCustom, item);
     setShow(false);
   };
 
@@ -69,7 +69,7 @@ function ModalEvent({ show, setShow, event }) {
       setEnd(new Date(event?.end).toLocaleString().slice(0, 8));
     }
   }, [event]);
-
+  console.log(event);
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>

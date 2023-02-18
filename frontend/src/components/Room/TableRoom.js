@@ -97,7 +97,7 @@ function TableRoom({ tab }) {
                   />
                   <BsTrashFill
                     className="icon"
-                    onClick={() => deleteRoom(item)}
+                    onClick={() => deleteRoom(axiosCustom, item)}
                   />
                 </td>
               </tr>

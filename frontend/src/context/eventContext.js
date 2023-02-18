@@ -50,6 +50,7 @@ export const EventProvider = ({ children }) => {
     }
   };
   const deleteEvent = async (axios, item) => {
+    console.log(item);
     try {
       const res = await axios.delete(`event/${item?._id}`);
       dispatch({
