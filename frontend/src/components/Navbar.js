@@ -6,15 +6,12 @@ import Top from "./Navbar/Top";
 import { AuthContext } from "../context/authContext";
 
 function Navbar() {
-  const { user } = useContext(AuthContext);
-  if (!user) {
-    return <></>;
-  }
+  const { auth } = useContext(AuthContext);
   return (
     <Wrapper>
-      <Top name={user?.name} photo={user?.photo} />
-      <Menu role={user?.isAdmin} />
-      <ListEvent accessToken={user?.accessToken} />
+      <Top name={auth?.name} photo={auth?.photo} />
+      <Menu role={auth?.isAdmin} />
+      <ListEvent accessToken={auth?.accessToken} />
     </Wrapper>
   );
 }

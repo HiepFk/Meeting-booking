@@ -9,9 +9,14 @@ import Input from "../Input";
 import Checkbox from "../Checkbox";
 import { UserContext } from "../../context/userContext";
 import { DepartmentContext } from "../../context/departmentContext";
+import { AuthContext } from "../../context/authContext";
+import { axiosToken } from "../../apis/createInstance";
 function ModalUser({ show, setShow, user }) {
   const { addUser, updateUser, handeChangeReFresh } = useContext(UserContext);
   const { listDepartment } = useContext(DepartmentContext);
+
+  const { auth, refreshUser } = useContext(AuthContext);
+  const axiosCustom = axiosToken(auth, refreshUser);
 
   const handleClose = () => setShow(false);
   const [name, setName] = useState("");
@@ -44,9 +49,9 @@ function ModalUser({ show, setShow, user }) {
       isAuthRoomVip,
     };
     if (user) {
-      updateUser(data);
+      updateUser(axiosCustom, data);
     } else {
-      addUser(data);
+      addUser(axiosCustom, data);
     }
     setShow(false);
     handeChangeReFresh();

@@ -7,10 +7,13 @@ import { BiCheckCircle } from "react-icons/bi";
 import { UserContext } from "../../context/userContext";
 import Loading from "../Loading";
 import ModalUser from "./ModalUser";
+import { AuthContext } from "../../context/authContext";
+import { axiosToken } from "../../apis/createInstance";
 function TableUser() {
   const { listUser, getListUser, loading, deleteUser, reFresh } =
     useContext(UserContext);
-
+  const { auth, refreshUser } = useContext(AuthContext);
+  const axiosCustom = axiosToken(auth, refreshUser);
   const [show, setShow] = useState(false);
   const [item, setItem] = useState(null);
 
@@ -20,7 +23,7 @@ function TableUser() {
   };
 
   useEffect(() => {
-    getListUser();
+    getListUser(axiosCustom);
   }, [reFresh]);
 
   if (loading) {
@@ -84,7 +87,7 @@ function TableUser() {
                   />
                   <BsTrashFill
                     className="icon"
-                    onClick={() => deleteUser(item)}
+                    onClick={() => deleteUser(axiosCustom, item)}
                   />
                 </td>
               </tr>

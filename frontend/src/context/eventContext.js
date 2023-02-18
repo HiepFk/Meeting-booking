@@ -1,7 +1,6 @@
-import { createContext, useReducer } from "react";
+import { createContext, useMemo, useReducer } from "react";
 import eventReducer from "../reducers/eventReducer";
 import { eventAction } from "../utils/actions";
-import { axiosToken, axiosNormal } from "../apis/createInstance";
 
 export const EventContext = createContext();
 
@@ -22,77 +21,83 @@ export const EventProvider = ({ children }) => {
     });
   };
 
-  const getEvent = async (id) => {
+  const getEvent = async (axios, id) => {
     dispatch({ type: eventAction.GET_EVENT_BEGIN });
     try {
-      const res = await axiosNormal.get(`event/${id}`);
+      const res = await axios.get(`event/${id}`);
       dispatch({ type: eventAction.GET_EVENT_SUCCESS, payload: res.data });
     } catch (error) {
       dispatch({ type: eventAction.GET_EVENT_ERROR });
     }
   };
-  const getListEvent = async () => {
+  const getListEvent = async (axios) => {
     dispatch({ type: eventAction.GET_LISTEVENT_BEGIN });
     try {
-      const res = await axiosNormal.get(`event`);
+      const res = await axios.get(`event`);
       dispatch({ type: eventAction.GET_LISTEVENT_SUCCESS, payload: res.data });
     } catch (error) {
       dispatch({ type: eventAction.GET_LISTEVENT_ERROR });
     }
   };
-  const updateEvent = async (data) => {
-    // dispatch({ type: eventAction.GET_EVENT_BEGIN });
+  const updateEvent = async (axios, data) => {
     try {
-      const res = await axiosNormal.patch(`event/${data._id}`, data);
-      // dispatch({ type: eventAction.GET_EVENT_SUCCESS, payload: res.data });
+      const res = await axios.patch(`event/${data._id}`, data);
       dispatch({
         type: eventAction.REFRESH,
       });
     } catch (error) {
       console.log(error);
-      // dispatch({ type: eventAction.GET_EVENT_ERROR });
     }
   };
-  const deleteEvent = async (item) => {
-    // dispatch({ type: eventAction.GET_LISTEVENT_BEGIN });
+  const deleteEvent = async (axios, item) => {
     try {
-      const res = await axiosNormal.delete(`event/${item?._id}`);
-      // dispatch({ type: eventAction.GET_LISTEVENT_SUCCESS, payload: res.data });
-      // dispatch({ type: eventAction.DELETE_EVENT, payload: item });
+      const res = await axios.delete(`event/${item?._id}`);
       dispatch({
         type: eventAction.REFRESH,
       });
     } catch (error) {
       console.log(error);
-      // dispatch({ type: eventAction.GET_LISTEVENT_ERROR });
     }
   };
-  const addEvent = async (data) => {
+  const addEvent = async (axios, data) => {
     dispatch({ type: eventAction.GET_LISTEVENT_BEGIN });
     try {
-      const res = await axiosNormal.post(`event`, data);
-      // dispatch({ type: eventAction.GET_LISTEVENT_SUCCESS, payload: res.data });
-      // dispatch({ type: eventAction.ADD_EVENT, payload: res.data });
+      const res = await axios.post(`event`, data);
+
       dispatch({
         type: eventAction.REFRESH,
       });
     } catch (error) {
       console.log(error);
-      // dispatch({ type: eventAction.GET_LISTEVENT_ERROR });
     }
   };
 
+  const globalContextValue = useMemo(
+    () => ({
+      dispatch,
+      ...state,
+      getEvent,
+      getListEvent,
+      updateEvent,
+      deleteEvent,
+      addEvent,
+      handeChangeReFresh,
+    }),
+    [dispatch, state]
+  );
+
   return (
     <EventContext.Provider
-      value={{
-        ...state,
-        getEvent,
-        getListEvent,
-        updateEvent,
-        deleteEvent,
-        addEvent,
-        handeChangeReFresh,
-      }}
+      // value={{
+      //   ...state,
+      //   getEvent,
+      //   getListEvent,
+      //   updateEvent,
+      //   deleteEvent,
+      //   addEvent,
+      //   handeChangeReFresh,
+      // }}
+      value={globalContextValue}
     >
       {children}
     </EventContext.Provider>

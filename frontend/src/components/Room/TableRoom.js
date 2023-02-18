@@ -7,9 +7,15 @@ import { BiCheckCircle } from "react-icons/bi";
 import { RoomContext } from "../../context/roomContext";
 import Loading from "../Loading";
 import ModalRoom from "./ModalRoom";
+import { AuthContext } from "../../context/authContext";
+import { axiosToken } from "../../apis/createInstance";
 function TableRoom({ tab }) {
   const { listRoom, getListRoom, loading, deleteRoom, reFresh } =
     useContext(RoomContext);
+
+  const { auth, refreshUser } = useContext(AuthContext);
+  const axiosCustom = axiosToken(auth, refreshUser);
+
   const [show, setShow] = useState(false);
   const [item, setItem] = useState(null);
 
@@ -20,7 +26,7 @@ function TableRoom({ tab }) {
 
   useEffect(() => {
     if (tab === "room") {
-      getListRoom();
+      getListRoom(axiosCustom);
     }
   }, [reFresh, tab]);
 

@@ -1,7 +1,6 @@
-import { createContext, useReducer } from "react";
+import { createContext, useMemo, useReducer } from "react";
 import departmentReducer from "../reducers/departmentReducer";
 import { departmentAction } from "../utils/actions";
-import { axiosToken, axiosNormal } from "../apis/createInstance";
 
 export const DepartmentContext = createContext();
 
@@ -21,10 +20,10 @@ export const DepartmentProvider = ({ children }) => {
     });
   };
 
-  const getListDepartment = async () => {
+  const getListDepartment = async (axios) => {
     dispatch({ type: departmentAction.GET_LISTDEPARTMENT_BEGIN });
     try {
-      const res = await axiosNormal.get(`department`);
+      const res = await axios.get(`department`);
       dispatch({
         type: departmentAction.GET_LISTDEPARTMENT_SUCCESS,
         payload: res.data,
@@ -33,9 +32,9 @@ export const DepartmentProvider = ({ children }) => {
       dispatch({ type: departmentAction.GET_LISTDEPARTMENT_ERROR });
     }
   };
-  const updateDepartment = async (data) => {
+  const updateDepartment = async (axios, data) => {
     try {
-      const res = await axiosNormal.patch(`department/${data._id}`, data);
+      const res = await axios.patch(`department/${data._id}`, data);
       dispatch({
         type: departmentAction.REFRESH,
       });
@@ -43,9 +42,9 @@ export const DepartmentProvider = ({ children }) => {
       console.log(error);
     }
   };
-  const deleteDepartment = async (item) => {
+  const deleteDepartment = async (axios, item) => {
     try {
-      axiosNormal.delete(`department/${item?._id}`);
+      axios.delete(`department/${item?._id}`);
       dispatch({
         type: departmentAction.DELETE_DEPARTMENT,
         payload: item,
@@ -54,9 +53,9 @@ export const DepartmentProvider = ({ children }) => {
       console.log(error);
     }
   };
-  const addDepartment = async (data) => {
+  const addDepartment = async (axios, data) => {
     try {
-      const res = await axiosNormal.post(`department`, data);
+      const res = await axios.post(`department`, data);
       dispatch({
         type: departmentAction.ADD_DEPARTMENT,
         payload: res.data,
@@ -66,16 +65,30 @@ export const DepartmentProvider = ({ children }) => {
     }
   };
 
+  const globalContextValue = useMemo(
+    () => ({
+      dispatch,
+      ...state,
+      getListDepartment,
+      updateDepartment,
+      deleteDepartment,
+      addDepartment,
+      handeChangeReFresh,
+    }),
+    [dispatch, state]
+  );
+
   return (
     <DepartmentContext.Provider
-      value={{
-        ...state,
-        getListDepartment,
-        updateDepartment,
-        deleteDepartment,
-        addDepartment,
-        handeChangeReFresh,
-      }}
+      value={globalContextValue}
+      // value={{
+      //   ...state,
+      //   getListDepartment,
+      //   updateDepartment,
+      //   deleteDepartment,
+      //   addDepartment,
+      //   handeChangeReFresh,
+      // }}
     >
       {children}
     </DepartmentContext.Provider>

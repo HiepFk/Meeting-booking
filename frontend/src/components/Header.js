@@ -7,7 +7,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import { useNavigate } from "react-router-dom";
 function Header() {
-  const { user, logout } = useContext(AuthContext);
+  const { auth, logout } = useContext(AuthContext);
   const navigate = useNavigate();
   const setFullScreen = (e) => {
     e.stopPropagation();
@@ -19,10 +19,6 @@ function Header() {
       document.exitFullscreen();
     }
   };
-
-  if (!user) {
-    return <></>;
-  }
   return (
     <Wrapper>
       <div className="header">
@@ -31,17 +27,16 @@ function Header() {
           <div className="arrow" onClick={setFullScreen}>
             <AiOutlineArrowsAlt />
           </div>
-          <img src={user?.photo} alt="" className="user_img" />
+          <img src={auth?.photo} alt="" className="user_img" />
           {/* <div className="user_name">{user?.name}</div> */}
           <DropdownButton
             as={ButtonGroup}
-            title={user?.name}
+            title={auth?.name}
             id="bg-vertical-dropdown-1"
             className="dropdown"
             variant=""
           >
-            <Dropdown.Item eventKey="1">Profile</Dropdown.Item>
-            <Dropdown.Item eventKey="2" onClick={() => logout(navigate)}>
+            <Dropdown.Item eventKey="1" onClick={() => logout(navigate)}>
               Logout
             </Dropdown.Item>
           </DropdownButton>

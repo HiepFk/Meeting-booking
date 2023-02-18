@@ -6,46 +6,15 @@ import wrapper from "../assets/image/login.jpg";
 import styled from "styled-components";
 import { AuthContext } from "../context/authContext";
 import Button from "react-bootstrap/Button";
-// import { gapi } from "gapi-script";
-// import { GoogleLogin } from "react-google-login";
-import {
-  useSession,
-  useSupabaseClient,
-  useSessionContext,
-} from "@supabase/auth-helpers-react";
+
 function Login() {
   const navigate = useNavigate();
-  const { user, login } = useContext(AuthContext);
-
-  const session = useSession(); // tokens, when session exists we have a user
-  const supabase = useSupabaseClient(); // talk to supabase!
-  const { isLoading } = useSessionContext();
-
+  const { auth, login } = useContext(AuthContext);
   useEffect(() => {
-    if (user) {
+    if (auth) {
       navigate("/");
     }
-  }, [user, navigate]);
-
-  const googleSignIn = async (e) => {
-    e.preventDefault();
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        scopes: "https://www.googleapis.com/auth/calendar",
-      },
-    });
-    if (error) {
-      alert("Error logging in to Google provider with Supabase");
-      console.log(error);
-    } else {
-      await login(navigate);
-      // if (session?.user) {
-      //   await login(navigate, session?.user);
-      // }
-      // console.log(session?.user);
-    }
-  };
+  }, [auth, navigate]);
 
   return (
     <Wrapper
@@ -60,20 +29,14 @@ function Login() {
           <h1 className="text-opacity-80 text-danger">Welcome</h1>
         </div>
 
-        <Button variant="danger" className="login_btn" onClick={login}>
+        <Button
+          variant="danger"
+          className="login_btn"
+          onClick={() => login(navigate)}
+        >
           <FaGooglePlusG />
         </Button>
       </div>
-      {/* <GoogleLogin
-        clientId="409917240301-3klqt6qln1b6qmbim837adg0hpnal9fb.apps.googleusercontent.com"
-        buttonText="Login"
-        onSuccess={responseGoogle}
-        onFailure={responseError}
-        cookiePolicy={"single_host_origin"}
-        responseType="code"
-        accessType="offline"
-        scope="openid email profile https://www.googleapis.com/auth/calendar"
-      /> */}
     </Wrapper>
   );
 }

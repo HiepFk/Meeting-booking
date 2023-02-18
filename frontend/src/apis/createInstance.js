@@ -2,10 +2,13 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 const link = process.env.REACT_APP_API_LINK;
 
-// console.log(link);
+axios.defaults.withCredentials = true;
+
 export const axiosNormal = axios.create({
-  // baseURL: `${link}`,
-  baseURL: "http://localhost:8000/api/v1/",
+  baseURL: link,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
 const refreshToken = async () => {
@@ -13,27 +16,33 @@ const refreshToken = async () => {
     const res = await axiosNormal.get(`user/refresh`, {
       withCredentials: true,
     });
-
     return res.data;
   } catch (err) {
     console.log(err);
   }
 };
 
-export const axiosToken = (accessToken) => {
-  console.log(1);
-  const newInstance = axiosNormal;
+export const axiosToken = (user, refreshUser) => {
+  const newInstance = axios.create({
+    baseURL: link,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
   newInstance.interceptors.request.use(
     async (config) => {
+      config.headers["token"] = "Bearer " + user?.accessToken;
       let date = new Date();
-
-      const decodedToken = jwt_decode(accessToken);
+      const decodedToken = jwt_decode(user?.accessToken);
 
       if (decodedToken.exp < date.getTime() / 1000) {
         const data = await refreshToken();
-        config.headers["token"] = "Bearer " + data;
-      } else {
-        config.headers["token"] = "Bearer " + accessToken;
+        const newUser = {
+          ...user,
+          accessToken: data.accessToken,
+        };
+        refreshUser(newUser);
+        config.headers["token"] = "Bearer " + data.accessToken;
       }
       return config;
     },

@@ -1,17 +1,15 @@
-import { createContext, useReducer } from "react";
+import { createContext, useMemo, useReducer } from "react";
 import authReducer from "../reducers/authReducer";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../utils/firebase";
 import { authAction } from "../utils/actions";
 import { axiosNormal } from "../apis/createInstance";
-import { useSession } from "@supabase/auth-helpers-react";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const session = useSession();
   const initialState = {
-    user: localStorage.getItem("userInfo")
-      ? JSON.parse(localStorage.getItem("userInfo"))
+    auth: localStorage.getItem("auth")
+      ? JSON.parse(localStorage.getItem("auth"))
       : null,
     loading: false,
     error: false,
@@ -19,65 +17,58 @@ export const AuthProvider = ({ children }) => {
 
   const [state, dispatch] = useReducer(authReducer, initialState);
 
+  const refreshUser = (data) => {
+    dispatch({ type: authAction.LOGIN_SUCCESS, payload: data });
+  };
+
   const login = async (navigate) => {
     dispatch({ type: authAction.LOGIN_BEGIN });
-
     signInWithPopup(auth, provider)
       .then((result) => {
         axiosNormal
-          .post(`user/sign-google`, {
+          .post(`user/login`, {
             name: result.user.displayName,
             email: result.user.email,
             photo: result.user.photoURL,
           })
           .then((res) => {
             dispatch({ type: authAction.LOGIN_SUCCESS, payload: res.data });
-            localStorage.setItem("userInfo", JSON.stringify(res.data));
-
+            localStorage.setItem("auth", JSON.stringify(res.data));
             navigate("/");
           });
       })
       .catch((error) => {
+        console.log(error);
         dispatch({ type: authAction.LOGIN_ERROR });
       });
   };
-  // const login = async (navigate) => {
-  //   console.log(session);
-  //   dispatch({ type: authAction.LOGIN_BEGIN });
-
-  //   try {
-  //     const user = {
-  //       name: session?.user?.user_metadata?.name,
-  //       email: session?.user?.user_metadata?.email,
-  //       photo: session?.user?.user_metadata?.picture,
-  //     };
-  //     const res = axiosNormal.post(`user/sign-google`, {
-  //       user,
-  //     });
-  //     dispatch({ type: authAction.LOGIN_SUCCESS, payload: res.data });
-  //     console.log(res.data);
-  //     localStorage.setItem("userInfo", JSON.stringify(res.data));
-  //     navigate("/");
-  //   } catch (error) {
-  //     dispatch({ type: authAction.LOGIN_ERROR });
-  //   }
-  // };
 
   const logout = async (navigate) => {
     dispatch({ type: authAction.LOGOUT_BEGIN });
     try {
       await axiosNormal.get(`user/logout`);
       dispatch({ type: authAction.LOGOUT_SUCCESS });
-      // await a.auth.signOut();
+      localStorage.removeItem("auth");
       navigate("/login");
-      localStorage.removeItem("userInfo");
     } catch (error) {
+      console.log(error);
       dispatch({ type: authAction.LOGOUT_ERROR });
     }
   };
 
+  const globalContextValue = useMemo(
+    () => ({
+      dispatch,
+      ...state,
+      login,
+      logout,
+      refreshUser,
+    }),
+    [dispatch, state]
+  );
+
   return (
-    <AuthContext.Provider value={{ ...state, login, logout }}>
+    <AuthContext.Provider value={globalContextValue}>
       {children}
     </AuthContext.Provider>
   );

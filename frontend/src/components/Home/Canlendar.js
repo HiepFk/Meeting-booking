@@ -6,21 +6,23 @@ import moment from "moment";
 
 import ModalEvent from "./ModalEvent";
 import { EventContext } from "../../context/eventContext";
-
+import { AuthContext } from "../../context/authContext";
+import { axiosToken } from "../../apis/createInstance";
 const localizer = momentLocalizer(moment);
 function Canlendar() {
   const { listEvent, getListEvent, reFresh } = useContext(EventContext);
+  const { refreshUser, auth } = useContext(AuthContext);
 
   const [show, setShow] = useState(false);
   const [item, setItem] = useState(null);
-
+  const axiosJwt = axiosToken(auth, refreshUser);
   const handeEdit = (item) => {
     setItem(item);
     setShow(true);
   };
 
   useEffect(() => {
-    getListEvent();
+    getListEvent(axiosJwt);
   }, [reFresh]);
 
   return (

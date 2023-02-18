@@ -5,7 +5,8 @@ import { MdEdit } from "react-icons/md";
 import { DepartmentContext } from "../../context/departmentContext";
 import Loading from "../Loading";
 import ModalDepartment from "./ModalDepartment";
-
+import { AuthContext } from "../../context/authContext";
+import { axiosToken } from "../../apis/createInstance";
 function TableDepartment({ tab }) {
   const {
     listDepartment,
@@ -14,6 +15,9 @@ function TableDepartment({ tab }) {
     deleteDepartment,
     reFresh,
   } = useContext(DepartmentContext);
+
+  const { auth, refreshUser } = useContext(AuthContext);
+  const axiosCustom = axiosToken(auth, refreshUser);
 
   const [show, setShow] = useState(false);
   const [item, setItem] = useState(null);
@@ -25,7 +29,7 @@ function TableDepartment({ tab }) {
 
   useEffect(() => {
     if (tab === "department") {
-      getListDepartment();
+      getListDepartment(axiosCustom);
     }
   }, [reFresh, tab]);
 

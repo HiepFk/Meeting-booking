@@ -9,14 +9,6 @@ const roomSchema = new mongoose.Schema(
       type: Number,
     },
     color: String,
-    hasDevice: {
-      type: Boolean,
-      default: false,
-    },
-    isVip: {
-      type: Boolean,
-      default: false,
-    },
   },
   {
     timestamps: true,

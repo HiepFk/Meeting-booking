@@ -32,9 +32,9 @@ exports.isAuthenticatedUser = catchAsync(async (req, res, next) => {
       )
     );
   }
-  if (!currentUser.isActive) {
-    return next(new AppError("Inactive user! Try again!", 401));
-  }
+  // if (!currentUser.isActive) {
+  //   return next(new AppError("Inactive user! Try again!", 401));
+  // }
   req.user = currentUser;
   next();
 });

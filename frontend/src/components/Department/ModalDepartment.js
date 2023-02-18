@@ -4,10 +4,14 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { DepartmentContext } from "../../context/departmentContext";
 import Input from "../Input";
-
+import { AuthContext } from "../../context/authContext";
+import { axiosToken } from "../../apis/createInstance";
 function ModalDepartment({ show, setShow, department }) {
   const { addDepartment, updateDepartment, handeChangeReFresh } =
     useContext(DepartmentContext);
+
+  const { auth, refreshUser } = useContext(AuthContext);
+  const axiosCustom = axiosToken(auth, refreshUser);
 
   const handleClose = () => setShow(false);
   const [name, setName] = useState("");
@@ -25,10 +29,10 @@ function ModalDepartment({ show, setShow, department }) {
       name,
     };
     if (department) {
-      updateDepartment(data);
+      updateDepartment(axiosCustom, data);
       handeChangeReFresh();
     } else {
-      addDepartment(data);
+      addDepartment(axiosCustom, data);
     }
     setShow(false);
   };

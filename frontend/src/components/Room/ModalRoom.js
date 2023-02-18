@@ -5,10 +5,13 @@ import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import { RoomContext } from "../../context/roomContext";
 import Input from "../Input";
-
+import { AuthContext } from "../../context/authContext";
+import { axiosToken } from "../../apis/createInstance";
 function ModalRoom({ show, setShow, room }) {
   const { addRoom, updateRoom, handeChangeReFresh } = useContext(RoomContext);
   const handleClose = () => setShow(false);
+  const { auth, refreshUser } = useContext(AuthContext);
+  const axiosCustom = axiosToken(auth, refreshUser);
 
   const [name, setName] = useState("");
   const [size, setSize] = useState("");
@@ -37,10 +40,10 @@ function ModalRoom({ show, setShow, room }) {
       isVip,
     };
     if (room) {
-      updateRoom(data);
+      updateRoom(axiosCustom, data);
       handeChangeReFresh();
     } else {
-      addRoom(data);
+      addRoom(axiosCustom, data);
     }
     setShow(false);
   };

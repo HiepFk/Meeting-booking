@@ -10,11 +10,15 @@ import Input from "../Input";
 import { DepartmentContext } from "../../context/departmentContext";
 import { RoomContext } from "../../context/roomContext";
 import { EventContext } from "../../context/eventContext";
+import { AuthContext } from "../../context/authContext";
+import { axiosToken } from "../../apis/createInstance";
 
 function ModalEvent({ show, setShow, event }) {
   const { listDepartment } = useContext(DepartmentContext);
   const { listRoom } = useContext(RoomContext);
   const { addEvent, updateEvent, deleteEvent } = useContext(EventContext);
+  const { auth, refreshUser } = useContext(AuthContext);
+  const axiosCustom = axiosToken(auth, refreshUser);
 
   const handleClose = () => setShow(false);
   const arrDay = ["All", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -29,8 +33,6 @@ function ModalEvent({ show, setShow, event }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // console.log(new Date(day + "T" + start));
-    // console.log(typeof new Date(day + "T" + start));
     const data = {
       _id: event?._id,
       title,
@@ -43,9 +45,9 @@ function ModalEvent({ show, setShow, event }) {
       end: new Date(day + "T" + end),
     };
     if (event) {
-      updateEvent(data);
+      updateEvent(axiosCustom, data);
     } else {
-      addEvent(data);
+      addEvent(axiosCustom, data);
     }
     console.log(data.start, data.end);
     // setShow(false);

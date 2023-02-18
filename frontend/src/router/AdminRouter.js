@@ -3,17 +3,14 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 function AdminRouter() {
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
+  const { auth } = useContext(AuthContext);
+
   useEffect(() => {
-    if (!user?.isAdmin) {
+    if (!auth?.isAdmin) {
       navigate("/");
     }
-  }, [navigate, user]);
-  return (
-    <>
-      <Outlet />
-    </>
-  );
+  }, [navigate, auth]);
+  return <Outlet />;
 }
 
 export default AdminRouter;

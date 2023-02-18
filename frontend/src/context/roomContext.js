@@ -1,7 +1,6 @@
-import { createContext, useReducer } from "react";
+import { createContext, useMemo, useReducer } from "react";
 import roomReducer from "../reducers/roomReducer";
 import { roomAction } from "../utils/actions";
-import { axiosToken, axiosNormal } from "../apis/createInstance";
 
 export const RoomContext = createContext();
 
@@ -21,19 +20,18 @@ export const RoomProvider = ({ children }) => {
     });
   };
 
-  const getListRoom = async () => {
+  const getListRoom = async (axios) => {
     dispatch({ type: roomAction.GET_LISTROOM_BEGIN });
     try {
-      const res = await axiosNormal.get(`room`);
+      const res = await axios.get(`room`);
       dispatch({ type: roomAction.GET_LISTROOM_SUCCESS, payload: res.data });
     } catch (error) {
       dispatch({ type: roomAction.GET_LISTROOM_ERROR });
     }
   };
-  const updateRoom = async (data) => {
+  const updateRoom = async (axios, data) => {
     try {
-      const res = await axiosNormal.patch(`room/${data._id}`, data);
-      // dispatch({ type: roomAction.UPDATE_ROOM, payload: data });
+      const res = await axios.patch(`room/${data._id}`, data);
       dispatch({
         type: roomAction.REFRESH,
       });
@@ -41,33 +39,48 @@ export const RoomProvider = ({ children }) => {
       console.log(error);
     }
   };
-  const deleteRoom = async (item) => {
+  const deleteRoom = async (axios, item) => {
     try {
-      await axiosNormal.delete(`room/${item?._id}`);
+      await axios.delete(`room/${item?._id}`);
       dispatch({ type: roomAction.DELETE_ROOM, payload: item });
     } catch (error) {
       console.log(error);
     }
   };
-  const addRoom = async (data) => {
+  const addRoom = async (axios, data) => {
     try {
-      const res = await axiosNormal.post(`room`, data);
+      const res = await axios.post(`room`, data);
       dispatch({ type: roomAction.ADD_ROOM, payload: res.data });
     } catch (error) {
       console.log(error);
     }
   };
 
+  const globalContextValue = useMemo(
+    () => ({
+      dispatch,
+      ...state,
+      getListRoom,
+      updateRoom,
+      deleteRoom,
+      addRoom,
+      handeChangeReFresh,
+    }),
+    [dispatch, state]
+  );
+
   return (
     <RoomContext.Provider
-      value={{
-        ...state,
-        getListRoom,
-        updateRoom,
-        deleteRoom,
-        addRoom,
-        handeChangeReFresh,
-      }}
+      value={globalContextValue}
+
+      // value={{
+      //   ...state,
+      //   getListRoom,
+      //   updateRoom,
+      //   deleteRoom,
+      //   addRoom,
+      //   handeChangeReFresh,
+      // }}
     >
       {children}
     </RoomContext.Provider>

@@ -8,14 +8,12 @@ const {
   generateRefreshToken,
 } = require("../utils/jwtToken");
 
-const sendMail = require("../utils/sendEmail");
-
 const jwt = require("jsonwebtoken");
 
 let refreshTokens = [];
 
 const authController = {
-  googleAuth: catchAsync(async (req, res, next) => {
+  login: catchAsync(async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email });
     if (user) {
       createSendToken(
@@ -73,7 +71,6 @@ const authController = {
   }),
   logout: (req, res, next) => {
     res.clearCookie("refreshToken");
-    console.log("Clear");
     refreshTokens = refreshTokens.filter(
       (token) => token !== req.cookies.refreshToken
     );
